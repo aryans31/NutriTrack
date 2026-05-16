@@ -1,45 +1,8 @@
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import {
-    createUserWithEmailAndPassword,
-    getAuth,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut
-} from 'firebase/auth';
-
-const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID
-};
-
-const requiredKeys = ['apiKey', 'authDomain', 'projectId', 'appId'];
-
-function hasFirebaseConfig() {
-    return requiredKeys.every((key) => Boolean(firebaseConfig[key]));
-}
-
-let authInstance = null;
-
-function getInitializedAuth() {
-    if (!hasFirebaseConfig()) {
-        throw new Error('Firebase auth is not configured for this project yet.');
-    }
-
-    if (!authInstance) {
-        const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-        authInstance = getAuth(app);
-    }
-
-    return authInstance;
-}
+// Temporarily disable Firebase auth support.
+// All functions are stubbed so the app can run in guest mode.
 
 export function isFirebaseConfigured() {
-    return hasFirebaseConfig();
+    return false;
 }
 
 export function getFirebaseEnvTemplate() {
@@ -53,36 +16,26 @@ export function getFirebaseEnvTemplate() {
 }
 
 export function initAuthClient() {
-    if (!hasFirebaseConfig()) {
-        return null;
-    }
-
-    return getInitializedAuth();
+    return null;
 }
 
-export function subscribeToAuthChanges(callback) {
-    const auth = getInitializedAuth();
-    return onAuthStateChanged(auth, callback);
+export function subscribeToAuthChanges(/* callback */) {
+    // Return a no-op unsubscribe function
+    return () => {};
 }
 
-export async function registerWithEmail(email, password) {
-    const auth = getInitializedAuth();
-    return createUserWithEmailAndPassword(auth, email, password);
+export async function registerWithEmail(/* email, password */) {
+    return Promise.reject(new Error('Auth disabled'));
 }
 
-export async function loginWithEmail(email, password) {
-    const auth = getInitializedAuth();
-    return signInWithEmailAndPassword(auth, email, password);
+export async function loginWithEmail(/* email, password */) {
+    return Promise.reject(new Error('Auth disabled'));
 }
 
 export async function loginWithGoogle() {
-    const auth = getInitializedAuth();
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    return signInWithPopup(auth, provider);
+    return Promise.reject(new Error('Auth disabled'));
 }
 
 export async function logoutCurrentUser() {
-    const auth = getInitializedAuth();
-    return signOut(auth);
+    return Promise.reject(new Error('Auth disabled'));
 }

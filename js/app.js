@@ -55,21 +55,13 @@ class NutriTrackApp {
     }
 
     initAuth() {
-        this.bindAuthEvents();
-        this.applyAuthMode();
-        this.renderFirebaseHint();
-
-        if (!this.authConfigured) {
-            this.toggleAppShell(false);
-            this.setAuthAlert('Add your Firebase web app config to enable email sign-in and Google authentication.', 'error');
-            return;
-        }
-
-        initAuthClient();
-        this.authUnsubscribe = subscribeToAuthChanges((user) => {
-            this.currentUser = user;
-            this.handleAuthStateChanged(user);
-        });
+        // Authentication is temporarily disabled. Run the app in guest mode.
+        this.authConfigured = false;
+        this.authUnsubscribe = null;
+        this.currentUser = null;
+        // Ensure app shell is visible for guest usage
+        this.toggleAppShell(true);
+        this.clearAuthAlert();
     }
 
     bindAuthEvents() {
